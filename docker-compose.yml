@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+
+  elasticsearch:
+    image: elasticsearch:7.11.2
+    container_name: elasticsearch
+    hostname: elasticsearch
+    environment:
+      - "discovery.type=single-node"
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - backend
+
+  kibana:
+    image: kibana:7.11.2
+    container_name: kibana
+    hostname: kibana
+    ports: 
+      - 5601:5601
+    links:
+      - elasticsearch:elasticsearch
+    depends_on:
+      - elasticsearch
+    networks:
+      - backend
+  
+networks:
+  backend:
+    driver: bridge
