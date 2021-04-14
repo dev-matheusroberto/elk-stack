@@ -9,12 +9,13 @@ services:
     environment:
       - "discovery.type=single-node"
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
-      - xpack.security.enabled=$ELASTIC_SECURITY
-    ports:
+      - xpack.security.enabled=true
       - 9200:9200
       - 9300:9300
     networks:
-      - backend
+      - elasticnet
+    volumes:
+      - data:/usr/share/elasticsearch/data
 
   kibana:
     image: kibana:7.11.2
@@ -30,8 +31,12 @@ services:
     depends_on:
       - elasticsearch
     networks:
-      - backend
+      - elasticnet
   
 networks:
-  backend:
+  elasticnet:
     driver: bridge
+
+volumes:
+  data:
+    driver: local
